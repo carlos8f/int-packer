@@ -33,7 +33,9 @@ IntPacker.prototype.pack = function (values) {
   else if (!Array.isArray(values)) values = [].slice.call(arguments);
   var ret = '';
   this.lengths.forEach(function (length, idx) {
-    var section = zeroPad(values[idx], length);
+    var val = values[idx];
+    if (typeof val === 'undefined') val = 0;
+    var section = zeroPad(val, length);
     if (section.length !== length) {
       var err = new Error('section `' + section + '` does not match length ' + length);
       err.code = 'INVALID_LENGTH';
