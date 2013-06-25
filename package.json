@@ -1,0 +1,28 @@
+{
+  "name": "int-packer",
+  "version": "0.0.0",
+  "description": "Pack integers into bigger integers",
+  "main": "index.js",
+  "dependencies": {
+    "bignum": "~0.6.1"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/carlos8f/int-packer.git"
+  },
+  "homepage": "https://github.com/carlos8f/int-packer",
+  "keywords": [
+    "number",
+    "encode",
+    "decode",
+    "sort"
+  ],
+  "author": "Carlos Rodriguez <carlos@s8f.org> (http://s8f.org/)",
+  "license": "MIT"
+}
