@@ -11,9 +11,14 @@ function IntPacker (lengths) {
       return obj.length;
     });
   }
-  this.total = this.lengths.reduce(function (prev, length) {
-    return prev + length;
-  }, 0);
+  this.signed = [];
+  this.total = 0;
+  this.lengths.forEach(function (length, idx) {
+    var signed = length < 0;
+    self.signed.push(signed);
+    self.lengths[idx] = Math.abs(length);
+    self.total += self.lengths[idx] + (signed ? 1 : 0);
+  });
 }
 module.exports = function (lengths) {
   if (!Array.isArray(lengths)) lengths = [].slice.call(arguments);
@@ -34,12 +39,17 @@ IntPacker.prototype.pack = function (values) {
   var ret = '';
   this.lengths.forEach(function (length, idx) {
     var val = values[idx];
+    var negative = values[idx] < 0;
     if (typeof val === 'undefined') val = 0;
+    val = Math.abs(val);
     var section = zeroPad(val, length);
     if (section.length !== length) {
       var err = new Error('section `' + section + '` does not match length ' + length);
       err.code = 'INVALID_LENGTH';
       throw err;
+    }
+    if (self.signed[idx]) {
+      section = (negative ? '0' : '1') + section;
     }
     ret += section;
   });
@@ -53,16 +63,28 @@ IntPacker.prototype.pack = function (values) {
 };
 
 IntPacker.prototype.unpack = function (num) {
+  var self = this;
   num = zeroPad(num, this.total);
   var ret = [], idx = 0;
-  this.lengths.forEach(function (length) {
+  this.lengths.forEach(function (length, lengthIdx) {
+    var signed = self.signed[lengthIdx];
+    if (signed) length++;
     var section = num.substr(idx, length);
     if (section.length !== length) {
       var err = new Error('section `' + section + '` does not match length ' + length);
       err.code = 'INVALID_LENGTH';
       throw err;
     }
-    ret.push(Number(section));
+    var parsedNum;
+    if (signed) {
+      var negative = section[0] === '0';
+      section = section.substr(1);
+      parsedNum = Number(section) * (negative ? -1 : 1);
+    }
+    else {
+      parsedNum = Number(section);
+    }
+    ret.push(parsedNum);
     idx += length;
   });
   if (this.labels) {

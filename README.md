@@ -84,6 +84,19 @@ console.log(unpacked);
 */
 ```
 
+### Signed ints
+
+You can pack signed ints by using negative numbers to define the packer. Note
+that an extra digit will be needed to store the sign.
+
+```js
+var packer = require('int-packer')(-1, -3, -4, 1);
+var packed = packer.pack(-1, 800, -9999, 1);
+console.log(packed);
+// <BigNum 011800099991>
+var unpacked = packer.unpack(packed);
+console.log(unpacked);
+// [ -1, 800, -9999, 1 ]
 - - -
 
 ### Developed by [Terra Eclipse](http://www.terraeclipse.com)
