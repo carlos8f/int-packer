@@ -56,7 +56,7 @@ var packer = require('int-packer')(
   {label: 'height', length: 2},
   {label: 'weight', length: 3}
 );
-var num = p.pack({
+var num = packer.pack({
   sex: 0,
   year: 1983,
   month: 11,
