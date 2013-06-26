@@ -97,6 +97,8 @@ console.log(packed);
 var unpacked = packer.unpack(packed);
 console.log(unpacked);
 // [ -1, 800, -9999, 1 ]
+```
+
 - - -
 
 ### Developed by [Terra Eclipse](http://www.terraeclipse.com)
